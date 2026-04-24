@@ -27,61 +27,58 @@
           <h2>{{ currentPage.label }}</h2>
         </div>
         <div class="topbar-actions">
-          <el-tag effect="dark" type="primary">蓝白科研展板风</el-tag>
+          <el-tag effect="dark" type="primary">蓝白科研风</el-tag>
           <el-button type="primary" round>导出展示报告</el-button>
         </div>
       </el-header>
 
       <el-main class="content">
-        <section v-if="activePage === 'overview'" class="showcase-board">
-          <div class="board-title">
-            <span>成果影响与验证</span>
-          </div>
-          <div class="board-inner">
-            <h1>充安智护——电动车充电风险预警系统</h1>
-            <p class="board-subtitle">短期感知—融合分析—分级预警—闭环响应</p>
-            <p class="board-copy">
-              围绕“短期感知—融合分析—分级预警—闭环响应”构建原理样机验证链，形成仪表盘展示、异常识别、移动端告警及响应建议输出，验证方案工程可行性与展示完备性。
-            </p>
-
-            <div class="hero-cards">
-              <article v-for="card in overviewCards" :key="card.title" class="hero-card">
-                <h3>{{ card.title }}</h3>
-                <div class="visual-frame" :class="`visual-${card.type}`">
-                  <template v-if="card.type === 'dashboard'">
-                    <div class="mini-ring"></div>
-                    <div class="mini-lines">
-                      <span v-for="line in 5" :key="line"></span>
-                    </div>
-                    <div class="mini-bars">
-                      <i v-for="bar in 6" :key="bar"></i>
-                    </div>
-                  </template>
-                  <template v-else-if="card.type === 'vision'">
-                    <div class="camera-view">
-                      <span v-for="box in 4" :key="box"></span>
-                    </div>
-                    <div class="vision-stack">
-                      <i></i><i></i><i></i>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div class="phone-card"></div>
-                    <div class="phone-card second"></div>
-                  </template>
-                </div>
-                <p>{{ card.subtitle }}</p>
-                <div class="card-stats">
-                  <span v-for="stat in card.stats" :key="stat">{{ stat }}</span>
-                </div>
-              </article>
+        <section v-if="activePage === 'overview'" class="dashboard-home">
+          <div class="home-hero">
+            <div>
+              <p class="eyebrow">EV Charging Risk Early Warning</p>
+              <h1>充安智护——电动车充电风险预警系统</h1>
+              <p>短期感知—融合分析—分级预警—闭环响应</p>
             </div>
-
-            <div class="ability-row">
-              <div v-for="tag in abilityTags" :key="tag">{{ tag }}</div>
+            <div class="hero-status">
+              <span>系统运行正常</span>
+              <strong>24h</strong>
+              <em>实时监测中</em>
             </div>
-            <div class="slogan">从“能感知异常”走向“能分级、联动、闭环”</div>
           </div>
+
+          <div class="home-metrics">
+            <article v-for="metric in overviewMetrics" :key="metric.label" class="metric-card">
+              <p>{{ metric.label }}</p>
+              <strong>{{ metric.value }}<span>{{ metric.unit }}</span></strong>
+              <em :class="metric.level">{{ metric.trend }}</em>
+            </article>
+          </div>
+
+          <div class="home-charts">
+            <Panel title="风险等级分布" class="span-4">
+              <Chart :option="riskDonutOption" height="300px" />
+            </Panel>
+            <Panel title="实时风险趋势" class="span-5">
+              <Chart :option="riskLineOption" height="300px" />
+            </Panel>
+            <Panel title="告警类型统计" class="span-3">
+              <Chart :option="alertTypeOption" height="300px" />
+            </Panel>
+          </div>
+
+          <Panel title="闭环处置流程" class="span-12">
+            <div class="closed-loop">
+              <template v-for="(step, index) in closedLoopSteps" :key="step.title">
+                <article>
+                  <div>{{ index + 1 }}</div>
+                  <h3>{{ step.title }}</h3>
+                  <p>{{ step.desc }}</p>
+                </article>
+                <span v-if="index < closedLoopSteps.length - 1" class="loop-arrow">→</span>
+              </template>
+            </div>
+          </Panel>
         </section>
 
         <section v-else-if="activePage === 'monitor'" class="page-grid">
@@ -208,13 +205,13 @@ import { computed, ref } from 'vue'
 import Chart from './components/Chart.vue'
 import Panel from './components/Panel.vue'
 import {
-  abilityTags,
+  alertTypeStats,
   alerts,
+  closedLoopSteps,
   confidenceCards,
   evidenceSteps,
   modelFactors,
   modelFlow,
-  overviewCards,
   overviewMetrics,
   riskDistribution,
   riskTimeline,
@@ -280,6 +277,22 @@ const riskDonutOption = {
       center: ['50%', '44%'],
       data: riskDistribution,
       label: { color: chartText, formatter: '{b}\n{d}%' }
+    }
+  ]
+}
+
+const alertTypeOption = {
+  tooltip: { trigger: 'axis' },
+  grid: { left: 34, right: 16, top: 24, bottom: 58 },
+  xAxis: { type: 'category', data: alertTypeStats.map((item) => item.name), axisLabel: { color: chartText, interval: 0, rotate: 28 } },
+  yAxis: { type: 'value', ...axisStyle },
+  color: [colors[1]],
+  series: [
+    {
+      type: 'bar',
+      data: alertTypeStats.map((item) => item.value),
+      barMaxWidth: 24,
+      itemStyle: { borderRadius: [10, 10, 0, 0] }
     }
   ]
 }

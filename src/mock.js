@@ -1,37 +1,22 @@
-export const overviewCards = [
-  {
-    title: '风险仪表盘展示',
-    subtitle: '全局风险态势、充电点位分布、风险趋势',
-    stats: ['1286 个在线点位', '37 辆风险车辆', '96.7% 识别准确率'],
-    type: 'dashboard'
-  },
-  {
-    title: '异常识别展示',
-    subtitle: '充电区域异常多视角监测',
-    stats: ['4 路视频证据', '42 项时序特征', '18 秒内完成识别'],
-    type: 'vision'
-  },
-  {
-    title: '移动端告警展示',
-    subtitle: '多设备实时告警、应急响应与处理',
-    stats: ['三级告警推送', '闭环工单追踪', '移动端确认反馈'],
-    type: 'mobile'
-  }
-]
-
-export const abilityTags = ['预警前移', '分级输出', '闭环处理', '场景可复用']
-
 export const overviewMetrics = [
-  { label: '在线充电点位', value: 1286, unit: '个', trend: '+4.8%', level: 'normal' },
-  { label: '今日风险预警', value: 18, unit: '条', trend: '+3', level: 'danger' },
-  { label: '平均响应时长', value: 2.8, unit: '分钟', trend: '-31%', level: 'normal' },
-  { label: '闭环处置率', value: 94.6, unit: '%', trend: '+5.2%', level: 'normal' }
+  { label: '在线充电桩', value: 1286, unit: '台', trend: '+4.8%', level: 'normal' },
+  { label: '风险点位', value: 37, unit: '处', trend: '-12.5%', level: 'warning' },
+  { label: '今日告警', value: 18, unit: '条', trend: '+3', level: 'danger' },
+  { label: '模型准确率', value: 96.7, unit: '%', trend: '+1.2%', level: 'normal' }
 ]
 
 export const riskDistribution = [
   { value: 62, name: '低风险' },
   { value: 26, name: '中风险' },
   { value: 12, name: '高风险' }
+]
+
+export const alertTypeStats = [
+  { name: '温升异常', value: 7 },
+  { name: '电压离散', value: 4 },
+  { name: '电流波动', value: 3 },
+  { name: 'BMS 通信', value: 2 },
+  { name: '视觉异常', value: 2 }
 ]
 
 export const stationLoad = ['滨江能源站', '科创园站', '东湖快充站', '大学城超充站', '枫桥换电站', '城北综合站'].map((name, index) => ({
@@ -49,6 +34,14 @@ export const riskTimeline = [
   { time: '16:00', thermal: 76, voltage: 63, current: 58, score: 72 },
   { time: '20:00', thermal: 49, voltage: 39, current: 34, score: 45 },
   { time: '24:00', thermal: 35, voltage: 27, current: 24, score: 31 }
+]
+
+export const closedLoopSteps = [
+  { title: '感知采集', desc: '充电桩遥测、BMS 报文、现场图像同步接入' },
+  { title: '融合分析', desc: '时序特征与视觉证据进行置信度融合' },
+  { title: '风险分级', desc: '输出高、中、低三级风险与评分依据' },
+  { title: '告警推送', desc: '多终端同步通知并生成处置建议' },
+  { title: '处置反馈', desc: '人工确认、工单闭环、证据留存复盘' }
 ]
 
 export const alerts = [

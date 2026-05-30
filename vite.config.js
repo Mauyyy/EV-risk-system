@@ -2,5 +2,18 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  plugins: [vue()]
+  plugins: [vue()],
+  build: {
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vue: ['vue'],
+          element: ['element-plus'],
+          echarts: ['echarts'],
+          icons: ['lucide-vue-next']
+        }
+      }
+    }
+  }
 })
